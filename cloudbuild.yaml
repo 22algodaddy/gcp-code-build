@@ -2,7 +2,7 @@ steps:
   # Step to build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'build', '-t', 'gcr.io/mythic-delight-434312-r1/cloud-builf-img:v1.0.0', '.'
+      'build', '-t', 'gcr.io/mythic-delight-434312-r1/cloud-build-img:v1.0.0', '.'
     ]
 
 images:
