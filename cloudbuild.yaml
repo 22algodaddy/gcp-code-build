@@ -7,7 +7,7 @@ steps:
 
 images:
   # Specify the Docker image to save
-  - 'gcr.io/mythic-delight-434312-r1/cloud-builf-img:v1.0.0'
+  - 'gcr.io/mythic-delight-434312-r1/cloud-build-img:v1.0.0'
 
 options:
   logging: CLOUD_LOGGING_ONLY
