@@ -27,3 +27,5 @@ steps:
 images:
   # Specify the Docker image that should be stored in Artifact Registry
   - 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0'
+options:
+  logging: CLOUD_LOGGING_ONLY
