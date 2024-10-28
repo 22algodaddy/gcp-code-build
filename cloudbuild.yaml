@@ -1,14 +1,29 @@
+# cloudbuild.yaml
+
 steps:
-  # Step to build the Docker image
+  # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: [
-      'build', '-t', 'gcr.io/mythic-delight-434312-r1/cloud-build-img:v1.0.0', '.'
+      'build', '-t', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0', '.'
+    ]
+
+  # Step 2: Push the Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0'
+    ]
+
+  # Step 3: Deploy the image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', 'cloud-build-cloudrun',
+      '--image', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated'
     ]
 
 images:
-  # Specify the Docker image to save
-  - 'gcr.io/mythic-delight-434312-r1/cloud-build-img:v1.0.0'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
-
+  # Specify the Docker image that should be stored in Artifact Registry
+  - 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0'
