@@ -1,0 +1,32 @@
+steps:
+  # Step 1: Set environment variables for SonarQube
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        export SONAR_HOST_URL="http://34.72.166.147:9000/"
+        export SONAR_PROJECT_KEY=""
+        export SONAR_TOKEN="sqp_f5a94be95e28d54dacf36e97bbb10d7834bd60fe"
+        echo "SonarQube environment variables set."
+
+  # Step 2: Install dependencies
+  - name: 'python'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        pip install -r requirements.txt
+
+  # Step 3: Run SonarQube scan
+  - name: 'sonarsource/sonar-scanner-cli:latest'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        sonar-scanner \
+          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+          -Dsonar.sources=. \
+          -Dsonar.host.url=${SONAR_HOST_URL} \
+          -Dsonar.login=${SONAR_TOKEN} \
+          -Dsonar.language=py
