@@ -12,7 +12,6 @@ steps:
         '-Dsonar.projectName=gcp-cloudbuild' \
         '-Dsonar.host.url=${_SONAR_HOST_URL}' \
         '-Dsonar.qualitygate.wait=true' \
-        'allow_failure: true'
     dir: '/'
     id: 'sonarqube-analysis'
 options:
