@@ -1,32 +1,28 @@
 steps:
-  # Step 1: Build Docker image for the sonar-scanner
-  - name: 'gcr.io/cloud-builders/docker'
-    args: 
-      - 'build'
-      - '--build-arg'
-      - 'SONARQUBE_SCANNER_CLI_VERSION=4.6.0.2311'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
-      - '.'
-
-  # Step 2: Run sonar-scanner to analyze code
-  - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
-    entrypoint: 'sonar-scanner'
+  - name: 'gcr.io/cloud-builders/maven'
+    id: 'Build and SonarQube Analysis'
+    entrypoint: 'bash'
     args:
-      - '-Dsonar.host.url=http://34.72.166.147:9000'  # Your SonarQube server URL
-      - '-Dsonar.login=${_SONAR_TOKEN}'               # SonarQube token for authentication
-      - '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}'    # SonarQube project key
-      - '-Dsonar.sources=.'                           # The source directory to analyze
-    env:
-      - 'SONAR_TOKEN=${_SONAR_TOKEN}'
-      - 'SONAR_PROJECT_KEY=${_SONAR_PROJECT_KEY}'
+      - '-c'
+      - |
+        # Install SonarScanner
+        curl -sSLo /tmp/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
+        unzip /tmp/sonar-scanner.zip -d /tmp/
+        export PATH=$PATH:/tmp/sonar-scanner-4.7.0.2747-linux/bin
+        
+        # Run SonarQube analysis
+        sonar-scanner \
+          -Dsonar.projectKey=${_SONAR_PROJECT_KEY} \
+          -Dsonar.sources=.
+          -Dsonar.host.url=${_SONAR_HOST_URL} \
+          -Dsonar.login=${_SONAR_TOKEN}
+          
+        # Optional: Additional actions, like publishing the results to Cloud Storage or Slack
+        # gsutil cp sonar-report.json gs://your-bucket/sonar-reports/
+        
+timeout: '1200s'  # Set the timeout for your build process
 
-# List of images that should be pushed to Google Container Registry
-images: 
-  - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
-  - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
+# Substitutions to be used in Cloud Build
 
-options:
-  logging: CLOUD_LOGGING_ONLY
+# Optionally, you can define the trigger based on your repository's needs
+# You would need to create a trigger in Cloud Build that activates on code changes
