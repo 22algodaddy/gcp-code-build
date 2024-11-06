@@ -17,7 +17,7 @@ steps:
   #     - '-c'
   #     - |
   #       pip install -r requirements.txt
-  - name: "gcr.io/cloud-builders/bash"
+  - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: 'bash'
     args: ["-c","ls -altr"]
 
