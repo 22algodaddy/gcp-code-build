@@ -15,3 +15,5 @@ steps:
         'allow_failure: true'
     dir: '/'
     id: 'sonarqube-analysis'
+options:
+  logging: CLOUD_LOGGING_ONLY
