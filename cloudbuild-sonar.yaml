@@ -29,7 +29,6 @@ steps:
           -Dsonar.sources=. \
           -Dsonar.host.url=${_SONAR_HOST_URL} \
           -Dsonar.login=${_SONAR_TOKEN} \
-          -Dsonar.language=py
          
 options:
   logging: CLOUD_LOGGING_ONLY          
