@@ -1,28 +1,16 @@
-steps:
-  - name: 'gcr.io/cloud-builders/maven'
-    id: 'Build and SonarQube Analysis'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        # Install SonarScanner
-        curl -sSLo /tmp/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-        unzip /tmp/sonar-scanner.zip -d /tmp/
-
-        # Add SonarScanner to PATH
-        export PATH=$PATH:/tmp/sonar-scanner-4.7.0.2747-linux/bin
-        
-        # Run SonarQube analysis
-        sonar-scanner \
-          -Dsonar.projectKey=${_SONAR_PROJECT_KEY} \
-          -Dsonar.sources=. \
-          -Dsonar.host.url=${_SONAR_HOST_URL} \
-          -Dsonar.login=${_SONAR_TOKEN}
-
-        # Optional: Additional actions, like publishing the results to Cloud Storage or Slack
-        # gsutil cp sonar-report.json gs://your-bucket/sonar-reports/
-
-timeout: '1200s'  # Set the timeout for your build process
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+#static code analysis by sonarqube
+- name: 'maven:3.6.1-jdk-8'
+  entrypoint: 'bash'
+  args:
+    - -c
+    - |
+      unset MAVEN_CONFIG \
+      && echo "104.199.71.165 sonarqube.ct.blue.cdtapps.com" > /etc/hosts \
+      && mvn sonar:sonar -q -Dsonar.login=5531b1a2d571c0482a3d45f605830e08ccf5f245 \
+      '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}' \
+      '-Dsonar.projectName=gcp-cloudbuild' \
+      '-Dsonar.host.url=${_SONAR_HOST_URL}' \
+      '-Dsonar.qualitygate.wait=true' \
+      'allow_failure: true'
+  dir: '/'
+  id: 'sonarqube-analysis'
