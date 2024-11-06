@@ -1,10 +1,28 @@
 steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - 'build'
+      - '--build-arg'
+      - 'SONARQUBE_SCANNER_CLI_VERSION=4.6.0.2311'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
+      - '.'
+    images: 
+      - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
+      - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
+    tags: ['cloud-builders-community']
+
   - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
     args:
-    - '-Dsonar.host.url=http://34.72.166.147:9000/'
-    - '-Dsonar.login=${_SONAR_TOKEN}'
-    - '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}'
-    - '-Dsonar.sources=.'
-tags: ['cloud-builders-community']
+      - '-Dsonar.host.url=http://34.72.166.147:9000'
+      - '-Dsonar.login=${_SONAR_TOKEN}'
+      - '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}'
+      - '-Dsonar.sources=.'
+    env:
+      - 'SONAR_TOKEN=${_SONAR_TOKEN}'
+      - 'SONAR_PROJECT_KEY=${_SONAR_PROJECT_KEY}'
+
 options:
   logging: CLOUD_LOGGING_ONLY
