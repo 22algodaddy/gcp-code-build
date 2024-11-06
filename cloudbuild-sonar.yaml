@@ -6,3 +6,5 @@ steps:
     - '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}'
     - '-Dsonar.sources=.'
 tags: ['cloud-builders-community']
+options:
+  logging: CLOUD_LOGGING_ONLY
