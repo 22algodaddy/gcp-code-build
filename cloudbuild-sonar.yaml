@@ -1,4 +1,5 @@
 steps:
+  # Step 1: Build Docker image for the sonar-scanner
   - name: 'gcr.io/cloud-builders/docker'
     args: 
       - 'build'
@@ -9,22 +10,23 @@ steps:
       - '-t'
       - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
       - '.'
-images: 
-  - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
-  - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
 
-
+  # Step 2: Run sonar-scanner to analyze code
   - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
     entrypoint: 'sonar-scanner'
     args:
-      - '-Dsonar.host.url=http://34.72.166.147:9000'
-      - '-Dsonar.login=${_SONAR_TOKEN}'
-      - '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}'
-      - '-Dsonar.sources=.'
+      - '-Dsonar.host.url=http://34.72.166.147:9000'  # Your SonarQube server URL
+      - '-Dsonar.login=${_SONAR_TOKEN}'               # SonarQube token for authentication
+      - '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}'    # SonarQube project key
+      - '-Dsonar.sources=.'                           # The source directory to analyze
     env:
       - 'SONAR_TOKEN=${_SONAR_TOKEN}'
       - 'SONAR_PROJECT_KEY=${_SONAR_PROJECT_KEY}'
 
+# List of images that should be pushed to Google Container Registry
+images: 
+  - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
+  - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
 
 options:
   logging: CLOUD_LOGGING_ONLY
