@@ -10,13 +10,13 @@ steps:
         export SONAR_TOKEN="sqp_f5a94be95e28d54dacf36e97bbb10d7834bd60fe"
         echo "SonarQube environment variables set."
 
-  # Step 2: Install dependencies
-  - name: 'python'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        pip install -r requirements.txt
+  # # Step 2: Install dependencies
+  # - name: 'python'
+  #   entrypoint: 'bash'
+  #   args:
+  #     - '-c'
+  #     - |
+  #       pip install -r requirements.txt
 
   # Step 3: Run SonarQube scan
   - name: 'sonarsource/sonar-scanner-cli:latest'
