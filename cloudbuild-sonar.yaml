@@ -1,45 +1,8 @@
 steps:
-  # # Step 1: Set environment variables for SonarQube
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
+  - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
     args:
-      - '-c'
-      - |
-        export SONAR_SCANNER_VERSION=6.2.0.4584
-        export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux-x64
-        curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux-x64.zip
-        unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
-        export PATH=$SONAR_SCANNER_HOME/bin:$PATH
-        sonar-scanner \
-        -Dsonar.projectKey=gcp-cloudbuild \
-        -Dsonar.sources=. \
-        -Dsonar.host.url=http://34.72.166.147:9000
-
-
-  # # Step 2: Install dependencies
-  # - name: 'python'
-  #   entrypoint: 'bash'
-  #   args:
-  #     - '-c'
-  #     - |
-  #       pip install -r requirements.txt
-  - name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: 'bash'
-    args: ["-c","ls -altr"]
-
-
-  # Step 3: Run SonarQube scan
-  # - name: 'sonarsource/sonar-scanner-cli:latest'
-  #   entrypoint: 'bash'
-  #   args:
-  #     - '-c'
-  #     - |
-  #       sonar-scanner \
-  #        -Dsonar.projectKey=gcp-cloudbuild \
-  #        -Dsonar.sources=. \
-  #        -Dsonar.host.url=http://34.72.166.147:9000 \
-  #        -Dsonar.token=sqp_f5a94be95e28d54dacf36e97bbb10d7834bd60fe
-  #        -Dsonar.language=py
-         
-options:
-  logging: CLOUD_LOGGING_ONLY          
+    - '-Dsonar.host.url=http://34.72.166.147:9000/'
+    - '-Dsonar.login=${_SONAR_TOKEN}'
+    - '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}'
+    - '-Dsonar.sources=.'
+tags: ['cloud-builders-community']
