@@ -17,11 +17,11 @@ steps:
   #     - '-c'
   #     - |
   #       pip install -r requirements.txt
-  - name: "Print pwd"
+  - name: "gcr.io/cloud-builders/bash"
     entrypoint: 'bash'
     args: ["-c","ls -altr"]
 
-    
+
   # Step 3: Run SonarQube scan
   - name: 'sonarsource/sonar-scanner-cli:latest'
     entrypoint: 'bash'
