@@ -9,7 +9,10 @@ steps:
       - '-t'
       - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
       - '.'
-    # Removed images from here; this belongs at the root level
+images: 
+  - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
+  - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
+
 
   - name: 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
     entrypoint: 'sonar-scanner'
@@ -22,9 +25,6 @@ steps:
       - 'SONAR_TOKEN=${_SONAR_TOKEN}'
       - 'SONAR_PROJECT_KEY=${_SONAR_PROJECT_KEY}'
 
-images: 
-  - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
-  - 'gcr.io/$PROJECT_ID/sonar-scanner:4.6.0.2311'
 
 options:
   logging: CLOUD_LOGGING_ONLY
