@@ -1,20 +1,30 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+FROM ubuntu:latest
 
-# Set the working directory in the container
-WORKDIR /app
+LABEL maintainer "Ram Gopinathan"
 
-# Copy the current directory contents into the container at /app
-COPY main.py /app
+ARG SONARQUBE_SCANNER_CLI_VERSION="4.6.0.2311"
 
-# Install any necessary dependencies
-RUN pip install flask
+ENV SONARQUBE_SCANNER_HOME /opt/sonar-scanner-${SONARQUBE_SCANNER_CLI_VERSION}-linux
+ENV SONARQUBE_SCANNER_BIN ${SONARQUBE_SCANNER_HOME}/bin
+ENV SONAR_SCANNER_CLI_DOWNLOAD_URL "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONARQUBE_SCANNER_CLI_VERSION}-linux.zip"
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+RUN apt-get update \
+	&& apt-get -y upgrade \
+	&& apt-get install -y ca-certificates \
+	&& update-ca-certificates \
+	&& apt-get install -y openjdk-17-jdk-headless tzdata curl unzip bash \
+	&& rm -rf /var/cache/apt/* \
+    && mkdir -p /tmp/sonar-scanner  \
+	&& curl -L --silent ${SONAR_SCANNER_CLI_DOWNLOAD_URL} >  /tmp/sonar-scanner/sonar-scanner-cli-${SONARQUBE_SCANNER_CLI_VERSION}-linux.zip  \
+    && mkdir -p /opt  \
+	&& unzip /tmp/sonar-scanner/sonar-scanner-cli-${SONARQUBE_SCANNER_CLI_VERSION}-linux.zip -d /opt  \
+	&& rm -rf /tmp/sonar-scanner
 
-# Define environment variable
-ENV FLASK_APP=app.py
 
-# Run app.py when the container launches
-CMD ["python","main.py"]
+ENV PATH $PATH:$SONARQUBE_SCANNER_BIN
+
+COPY launch.sh /
+
+WORKDIR ${SONARQUBE_SCANNER_HOME}
+
+ENTRYPOINT ["/launch.sh"]
