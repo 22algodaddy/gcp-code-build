@@ -1,32 +1,32 @@
-# cloudbuild.yaml
+# # cloudbuild.yaml
 
-steps:
-  # Step 1: Build the Docker image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'build', '-t', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0', '.'
-    ]
+# steps:
+#   # Step 1: Build the Docker image
+#   - name: 'gcr.io/cloud-builders/docker'
+#     args: [
+#       'build', '-t', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0', '.'
+#     ]
 
-  # Step 2: Push the Docker image to Artifact Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [
-      'push', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0'
-    ]
+#   # Step 2: Push the Docker image to Artifact Registry
+#   - name: 'gcr.io/cloud-builders/docker'
+#     args: [
+#       'push', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0'
+#     ]
 
-  # # Step 3: Deploy the image to Cloud Run
-  # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  #   entrypoint: 'gcloud'
-  #   args: [
-  #     'run', 'deploy', 'cloud-build-cloudrun',
-  #     '--image', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0',
-  #     '--region', 'us-central1',
-  #     '--platform', 'managed',
-  #     '--allow-unauthenticated',
-  #     '--port','5000'
-  #   ]
+#   # # Step 3: Deploy the image to Cloud Run
+#   # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   #   entrypoint: 'gcloud'
+#   #   args: [
+#   #     'run', 'deploy', 'cloud-build-cloudrun',
+#   #     '--image', 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0',
+#   #     '--region', 'us-central1',
+#   #     '--platform', 'managed',
+#   #     '--allow-unauthenticated',
+#   #     '--port','5000'
+#   #   ]
 
-# images:
-#   # Specify the Docker image that should be stored in Artifact Registry
-#   - 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0'
-options:
-  logging: CLOUD_LOGGING_ONLY
+# # images:
+# #   # Specify the Docker image that should be stored in Artifact Registry
+# #   - 'us-central1-docker.pkg.dev/mythic-delight-434312-r1/cloud-build-repo/myfimage:v1.0.0'
+# options:
+#   logging: CLOUD_LOGGING_ONLY
