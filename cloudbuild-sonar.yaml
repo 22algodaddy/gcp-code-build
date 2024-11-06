@@ -25,10 +25,11 @@ steps:
       - '-c'
       - |
         sonar-scanner \
-          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+          -Dsonar.projectKey=${_SONAR_PROJECT_KEY} \
           -Dsonar.sources=. \
-          -Dsonar.host.url=${SONAR_HOST_URL} \
-          -Dsonar.login=${SONAR_TOKEN} \
+          -Dsonar.host.url=${_SONAR_HOST_URL} \
+          -Dsonar.login=${_SONAR_TOKEN} \
           -Dsonar.language=py
+         
 options:
   logging: CLOUD_LOGGING_ONLY          
