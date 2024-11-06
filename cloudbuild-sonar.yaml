@@ -6,7 +6,7 @@
     - |
       unset MAVEN_CONFIG \
       && echo "104.199.71.165 sonarqube.ct.blue.cdtapps.com" > /etc/hosts \
-      && mvn sonar:sonar -q -Dsonar.login=5531b1a2d571c0482a3d45f605830e08ccf5f245 \
+      && mvn sonar:sonar -q -Dsonar.login=${_SONAR_HOST_URL} \
       '-Dsonar.projectKey=${_SONAR_PROJECT_KEY}' \
       '-Dsonar.projectName=gcp-cloudbuild' \
       '-Dsonar.host.url=${_SONAR_HOST_URL}' \
