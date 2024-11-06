@@ -21,6 +21,8 @@ steps:
         # gsutil cp sonar-report.json gs://your-bucket/sonar-reports/
         
 timeout: '1200s'  # Set the timeout for your build process
+options:
+  logging: CLOUD_LOGGING_ONLY
 
 # Substitutions to be used in Cloud Build
 
